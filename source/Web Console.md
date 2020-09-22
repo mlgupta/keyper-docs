@@ -22,30 +22,57 @@ By default, keyper comes with only one user: *admin*. This user cannot be delete
 
 ### Add User
 ![User Add](_static/user_add.png)
-Required fields are:
-* username
-* email
-* Last Name
+The Add User page has following data fields (* denotes required field): 
+* **username***: Username. Must be same as the username on linux system.
+* **email***: Email Address
+* **First Name**: First Name
+* **Last Name***: Last Name
+* **Display Name**: Autofilled. Concatenated first and last name
+* **Groups***: Host groups user is part of
 
 ```important:: Username must be same as the username on linux systems.
 ```  
 
 ### Edit User
 ![User Edit](_static/user_edit.png)
+Following data fields can be edited on Edit User page:
+* **email***: Email Address
+* **First Name**: First Name
+* **Last Name***: Last Name
+* **Display Name**: Autofilled. Concatenated first and last name
+* **Groups***: Host groups user is part of
+* **Password**: Change user's password
+* **Confirm Password**: Must be same as Password
 
 ### User SSH Public Keys
 ![User Edit - SSH Key List](_static/user_edit_key_list.png)
 
 ![User Edit - Add SSH Key](_static/user_edit_add_key.png)
+The Add SSH Key page has following data fields (* denotes required field): 
+* **Name***: Name of the key. It can be anything for you to remember key by
+* **Key***: Copy paste SSH Key
+* **Validity***: Validity in number of days for the key is going to be active
+* **Groups***: Hostgroups for which this Key would work
 
 ### Edit User Profile
 ![User Profile](_static/user_profile.png)
+Following data fields can be edited on Edit User Profile page:
+* **email***: Email Address
+* **First Name**: First Name
+* **Last Name***: Last Name
+* **Display Name**: Autofilled. Concatenated first and last name
+* **Password**: Change user's password
+* **Confirm Password**: Must be same as Password
 
 ## Hosts
 ![Host List](_static/host_list.png)
 
 ### Add Host
 ![Host Add](_static/host_add.png)
+The Add Host page has following data fields (* denotes required field): 
+* **Name***: Hostname. Must be same as the hostname of the linux system.
+* **Description***: Description
+
 When a host is added, a corresponding group with the same name is added under Groups. In addition, when a host is created it automatically gets added to *AllHosts* group
 
 ```important:: Hostname must be same as the hostname of the linux systems. i.e. what is returned by *hostname -s*
@@ -59,3 +86,8 @@ By default keypers comes with two groups:
 
 ### Add Group
 ![Group Add](_static/group_add.png)
+The Add Group page has following data fields (* denotes required field): 
+* **Name***: Hostname. Must be same as the hostname of the linux system.
+* **Description***: Description
+* **Users***: Users member of this group
+* **Hosts***: Hosts member of this group

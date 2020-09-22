@@ -19,8 +19,8 @@ from recommonmark.transform import AutoStructify
 # -- Project information -----------------------------------------------------
 
 project = 'Keyper'
-copyright = '2020, Manish Gupta'
-author = 'Manish Gupta'
+copyright = '2020, DBSentry Corp.'
+author = 'DBSentry Corp.'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1'
