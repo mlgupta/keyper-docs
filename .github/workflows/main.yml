@@ -56,5 +56,5 @@ jobs:
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-      #- name: Copy to webserver
-      #  run: rsync --delete -rvzh ./build/html/ apache@obelix3.dbsentry.com:/u01/www/keyper/keyper-docs/
+      - name: Copy to webserver
+        run: rsync --delete -rvzh ./build/html/ apache@obelix3.dbsentry.com:/u01/www/keyper/keyper-docs/
