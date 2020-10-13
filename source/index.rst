@@ -13,6 +13,7 @@ Keyper's documentation!
    Introduction
    Installation
    Web Console
+   CLI
    SSH Config
    OpenLDAP Config
    REST API

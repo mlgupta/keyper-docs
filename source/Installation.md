@@ -65,6 +65,14 @@ Following environment variables can be set as part of the docker cli:
 +----------------------------+--------------------------+----------------------------+
 | HOSTNAME                   | Hostname                 | <docker generated>         |
 +----------------------------+--------------------------+----------------------------+
+| LDAP_UID                   | ldap user UID            | 10100                      |
++----------------------------+--------------------------+----------------------------+
+| LDAP_GID                   | ldap user GID            | 10100                      |
++----------------------------+--------------------------+----------------------------+
+| NGINX_UID                  | nginx user UID           | 10080                      |
++----------------------------+--------------------------+----------------------------+
+| NGINX_GID                  | nginx user GID           | 10080                      |
++----------------------------+--------------------------+----------------------------+
 ```
 
 ```important:: We recommend setting the HOSTNAME parameter on cli. By default, the container creates a self-signed SSL certificate per the hostname. We recommend you use a CA issued certificate in production.
