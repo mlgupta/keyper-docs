@@ -47,6 +47,8 @@ jobs:
       - name: Install dependencies
         run: python3 -m pip install -r ./requirements.txt
 
+      - run: make html
+
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
