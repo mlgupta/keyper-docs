@@ -160,7 +160,7 @@ Will result in an output like the following:
 ]
 ```
 
-## Certification Based Authentication
+## Certificate Authentication
 If you are using Keyper as SSH CA and certificate based authentication, you can use following API URLs to get certificates from the system. These URLs are open and do not require authentication.
 
 To get CA's Host Public Key: 
