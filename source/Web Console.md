@@ -28,9 +28,11 @@ The Add User page has following data fields (* denotes required field):
 * **First Name**: First Name
 * **Last Name***: Last Name
 * **Display Name**: Autofilled. Concatenated first and last name
+* **Principal**: User names on SSH servers this is user is allowed to access (for e.g. root, apache). Principal are added to the certificate.
 * **Groups***: Host groups user is part of
+* **Cert/Key Validity Duration***: Validity of Key/Certificate for this user in Hours/Days/Weeks
 
-```important:: Username must be same as the username on linux systems.
+```important:: User name on the linux system this user is allowed access to must be added to the Principal list.
 ```  
 
 ### Edit User
@@ -40,19 +42,41 @@ Following data fields can be edited on Edit User page:
 * **First Name**: First Name
 * **Last Name***: Last Name
 * **Display Name**: Autofilled. Concatenated first and last name
+* **Principal**: User names on SSH servers this is user is allowed to access (for e.g. root, apache). Principal are added to the certificate.
 * **Groups***: Host groups user is part of
 * **Password**: Change user's password
 * **Confirm Password**: Must be same as Password
+* **Cert/Key Validity Duration***: Validity of Key/Certificate for this user in Hours/Days/Weeks
 
 ### User SSH Public Keys
 ![User Edit - SSH Key List](_static/user_edit_key_list.png)
+A key can be deleted by clicking on the delete button (X) against each key.
 
 ![User Edit - Add SSH Key](_static/user_edit_add_key.png)
 The Add SSH Key page has following data fields (* denotes required field): 
 * **Name***: Name of the key. It can be anything for you to remember key by
 * **Key***: Copy paste SSH Key
-* **Validity***: Validity in number of days for the key is going to be active
 * **Groups***: Hostgroups for which this Key would work
+
+### User SSH Public Certificate
+![User Edit - SSH Certificate List](_static/user_edit_cert_list.png)
+Following options are available for each certificate:
+* Download Certificate
+* Show Certificate
+* Copy Certifacate in clipboard (for easy copy paste operation)
+* Delete Key
+
+```important:: You can also download the certificate using CLI for any user by calling URL (for e.g. curl "https://sprout.dbsentry.com/api/usercert?username=alice&keyid=103")
+```  
+
+![User Edit - Add Key and get Certificate](_static/user_edit_add_cert.png)
+The Add SSH Key page has following data fields (* denotes required field): 
+* **Name***: Name of the key. It can be anything for you to remember key by
+* **Key***: Copy paste SSH Key
+* **Groups***: Hostgroups for which this Key would work
+
+```important:: A certificate is signed using CA's user key on the fly using the validity period assigned to the user.
+```  
 
 ### Edit User Profile
 ![User Profile](_static/user_profile.png)
@@ -72,10 +96,31 @@ Following data fields can be edited on Edit User Profile page:
 The Add Host page has following data fields (* denotes required field): 
 * **Name***: Hostname. Must be same as the hostname of the linux system.
 * **Description***: Description
+* **Principal**: Names this is host is known by (for e.g. mavrix2, mavrix2.dbsentry.com). Principal are added to the certificate.
+* **Certificate Validity Duration***: Validity of Key/Certificate for this host in Hours/Days/Weeks
 
 When a host is added, a corresponding group with the same name is added under Groups. In addition, when a host is created it automatically gets added to *AllHosts* group
 
-```important:: Hostname must be same as the hostname of the linux systems. i.e. what is returned by *hostname -s*
+```important:: Princiapl must be contain hostname of the linux systems. i.e. what is returned by *hostname -s*
+```  
+
+### Host Edit - Add Certificate
+![Host Edit - Add Certificate](_static/host_edit_cert.png)
+The Add Key page has following data fields (* denotes required field): 
+* **Name***: Name of the key. It can be anything for you to remember key by
+* **Key***: Copy paste SSH Key
+
+```important:: A certificate is signed using CA's host key on the fly using the principal and validity period assigned to the host.
+```  
+
+![Host Edit - Certificate](_static/host_edit_cert_list.png)
+Following options are available for each certificate:
+* Download Certificate
+* Show Certificate
+* Copy Certifacate in clipboard (for easy copy paste operation)
+* Delete Key
+
+```important:: You can also download the certificate using CLI for any user by calling URL (for e.g. curl "https://sprout.dbsentry.com/api/hostcert?hostname=getafix2&keyid=100")
 ```  
 
 ## Groups
