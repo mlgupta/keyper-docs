@@ -1,6 +1,6 @@
 # Installation
 ## Requirements
-Keyper is bundled as a docker container with alpine Linux as its base. To run keyper you need to have docker running on your server. Alternatively, you can also use podman.
+Keyper is bundled as a docker container with alpine Linux as its base. To run keyper you need to have docker running on your server. Alternatively, you can use podman, which is bundled natively with RHEL and its varients and it does not require any running daemon.
 
 ## Quickstart
 To run docker image using docker cli:
@@ -65,10 +65,6 @@ Following environment variables can be set as part of the docker cli:
 +----------------------------+--------------------------+----------------------------+
 | HOSTNAME                   | Hostname                 | <docker generated>         |
 +----------------------------+--------------------------+----------------------------+
-| LDAP_UID                   | ldap user UID            | 10100                      |
-+----------------------------+--------------------------+----------------------------+
-| LDAP_GID                   | ldap user GID            | 10100                      |
-+----------------------------+--------------------------+----------------------------+
 | NGINX_UID                  | nginx user UID           | 10080                      |
 +----------------------------+--------------------------+----------------------------+
 | NGINX_GID                  | nginx user GID           | 10080                      |
@@ -76,6 +72,9 @@ Following environment variables can be set as part of the docker cli:
 ```
 
 ```important:: We recommend setting the HOSTNAME parameter on cli. By default, the container creates a self-signed SSL certificate per the hostname. We recommend you use a CA issued certificate in production.
+```  
+
+```important:: Since version 0.2.1 all services (i.e. openldap, gunicorn, and nginx run as user nginx. 
 ```  
 
 ## Data Persistence
@@ -180,10 +179,13 @@ PID   USER     TIME  COMMAND
 /container/run/process # 
 ```
 
+```important:: Since version 0.2.1 all services (i.e. openldap, gunicorn, and nginx run as user nginx. 
+```  
+
 ## Logs
 Keeping in line with the [12-factor](https://12factor.net/) app methodology for the container, all the service logs are sent to the stdout of the running container. In addition, audit log for openldap is stored under /var/log/openldap/auditlog.ldif
 
-## Certificate
+## SSL Certificate
 By default, keyper generates a self-signed certificate for the HOSTNAME specified during startup. This certificate is used by slapd (ldaps) and nginx (https). All the files are located under /container/service/nginx/assets/certs. For production use, we recommend using CA issued certificate. You can set your CA issued certificate during run time, by mounting a directory containing those files to /container/service/nginx/assets/certs and adjust their name with the following environment variables:
 
 ```console
@@ -193,6 +195,30 @@ $ docker run --hostname keyper.example.org --mount sources=certs,target=/contain
 --env LDAP_TLS_CA_CRT_FILENAME=the-ca.crt \
 --detach dbsentry/keyper
 ```
+
+## SSH Certificate Authority (CA)
+By default, SSH CA gets created under ```/etc/sshca``` on the running container. Keyper creates two separate sigining keys: 
+* ```ca_user_key``` is used to sign users certificates.
+* ```ca_host_kety``` is used to sign hosts certificates. 
+
+In addition keyper also creates a Key Revocation List (KRL) file in OpenSSH format (```ca_krl```).
+
+In order for content under ```/etc/sshca``` to persist you should present a local docker volume.  
+
+```console
+/etc/sshca # ls -la
+total 20
+drwxr-xr-x    1 nginx    nginx          115 Oct 29 17:30 .
+drwxr-xr-x    1 root     root           118 Oct 29 17:30 ..
+-rw-------    1 nginx    nginx         2602 Oct 29 17:30 ca_host_key
+-rw-r--r--    1 nginx    nginx          571 Oct 29 17:30 ca_host_key.pub
+-rw-r--r--    1 nginx    nginx           44 Oct 29 17:30 ca_krl
+-rw-------    1 nginx    nginx         2602 Oct 29 17:30 ca_user_key
+-rw-r--r--    1 nginx    nginx          571 Oct 29 17:30 ca_user_key.pub
+drwxr-xr-x    2 nginx    nginx            6 Oct 29 17:30 tmp
+```
+
+You can also download CA public keys and KRL using API calls ```/hostca```, ```/userca```, and ```/crlca``` respectively.
 
 ## Passwords
 Todo

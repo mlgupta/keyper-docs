@@ -15,9 +15,9 @@ Following steps need to be performed on each linux server you want to be part of
     # mv auth.sh.txt auth.sh
     # chmod +x auth.sh
     ```
-4. Add following parameters to sshd_config
+4. Add following parameters to sshd_config (%k and %t are optional. For KRL verification %k and %t must be added)
     ```console
-    AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u 
+    AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u %f %k %t
     AuthorizedKeysCommandUser root
     ```
 5. Make appropriate tweaks to the script auth.sh. Especially check for KEYPER_HOST and http/https. Uncomment curl call line per your preference of http GET vs POST.
@@ -39,10 +39,14 @@ Following steps need to be performed on each linux server you want to be part of
     # and gets Public for the user attempting to login using SSH.               #
     #                                                                           #
     # The script accepts two parameters:                                        #
-    # 1. USER: linux username of the user trying to login is a mandetory        #
-    #           parameter. It is set using %u on AuthorizedKeysCommand          #
-    # 2. Ffingerprint: SSH Key finger print is an optional parameter. It is set #
-    #                  usign %f on AuthorizedKeysCommand                        #                          
+    # 1. username: linux username of the user trying to login. It is a required #
+    #              parameter. It is set using %u on AuthorizedKeysCommand       #
+    # 2. fingerprint: SSH Key finger print. It is an optional parameter. It is  #
+    #                 set using %f on AuthorizedKeysCommand                     #    
+    # 3. key: SSH Key finger print. It is an optional parameter. It is set      #
+    #                  using %k on AuthorizedKeysCommand                        #                          
+    # 4. key: SSH Key type. It is an optional parameter. It is set using %k on  #
+    #                  AuthorizedKeysCommand                                    #                          
     # - Deploy this script under /etc/ssh (or corresponding location in your    #
     #   distro).                                                                #
     # - Rename it as auth.sh, and make sure it is owned by root and is          #
@@ -52,7 +56,7 @@ Following steps need to be performed on each linux server you want to be part of
     # - Adjust KEYPER_HOST per the hostname and port.                           #
     # - Adjust HTTP protocol to http or https per your configuration of keyper. #
     # - Add following lines to sshd_config file (%f is optional)                #
-    #    AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u %f                   #
+    #    AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u %f %k %t             #
     #    AuthorizedKeysCommandUser root                                         #
     # - Make sure that HOST is set to the hostname defined in keyper console.   #
     # - Restart sshd                                                            #
@@ -63,20 +67,23 @@ Following steps need to be performed on each linux server you want to be part of
     #############################################################################
     USER="$1"
     FP="$2"
+    KEY="$3"
+    KEY_TYPE="$4"
     HOST=`hostname`
     KEYPER_HOST={{HOSTNAME}}
 
     CURL_ARGS="-s -q -f -m 7"
-    CURL_URL_ARGS_GET="username=${USER}&host=${HOST}"
-    CURL_URL_ARGS_POST="-Fusername=${USER} -Fhost=${HOST}"
+    CURL_ARGS="${CURL_ARGS} --data-urlencode username=${USER}"
+    CURL_ARGS="${CURL_ARGS} --data-urlencode host=${HOST}"
+
+    [ -z ${FP} ] || CURL_ARGS="${CURL_ARGS} --data-urlencode fingerprint=${FP}"
+    [ -z ${KEY} ] || CURL_ARGS="${CURL_ARGS} --data-urlencode key=${KEY_TYPE}#${KEY}"
 
     ## Use this if you want to get public keys using HTTP GET
-    [ -z ${FP} ] || CURL_URL_ARGS_GET="${CURL_URL_ARGS_GET}&fingerprint=${FP}"
-    curl ${CURL_ARGS} "http://${KEYPER_HOST}/api/authkeys?${CURL_URL_ARGS_GET}"
+    curl -G ${CURL_ARGS} http://${KEYPER_HOST}/api/authkeys
 
     ## Use this if you want get public keys using HTTP POST
-    #[ -z ${FP} ] || CURL_URL_ARGS_POST="${CURL_URL_ARGS_POST} -Ffingerprint=${FP}"
-    #curl ${CURL_ARGS} ${CURL_URL_ARGS_POST} http://${KEYPER_HOST}/api/authkeys
+    #curl ${CURL_ARGS} http://${KEYPER_HOST}/api/authkeys
 
     exit $?
     ```
@@ -106,9 +113,9 @@ Following steps need to be performed on each linux server you want to be part of
     # mv authprinc.sh.txt authprinc.sh
     # chmod +x authprinc.sh
     ```
-4. Add following parameters to sshd_config
+4. Add following parameters to sshd_config (%k, and %t are optional. For KRL verification %k and %t must be added)
     ```console
-    AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f 
+    AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f %k %t
     AuthorizedPrincipalsCommandUser root
     ```
 5. Make appropriate tweaks to the script authprinc.sh. Especially check for KEYPER_HOST and http/https. Uncomment curl call line per your preference of http GET vs POST.
@@ -130,10 +137,14 @@ Following steps need to be performed on each linux server you want to be part of
     # API and gets Principal for the user attempting to login using SSH.        #
     #                                                                           #
     # The script accepts two parameters:                                        #
-    # 1. USER: linux username of the user trying to login is a mandetory        #
-    #           parameter. It is set using %u on AuthorizedKeysCommand          #
-    # 2. Ffingerprint: SSH Key finger print for the key. It is set              #
-    #                  usign %f on AuthorizedPrincipalsCommand                  #                          
+    # 1. username: linux username of the user trying to login. It is a required #
+    #              parameter. It is set using %u on AuthorizedKeysCommand       #
+    # 2. fingerprint: SSH Key finger print. It is an optional parameter. It is  #
+    #                 set using %f on AuthorizedKeysCommand                     #    
+    # 3. key: SSH Key. It is an optional parameter. It is set using %k on       #
+    #         AuthorizedKeysCommand                                             #                          
+    # 4. key_type: SSH Key type. It is an optional parameter. It is set using   #
+    #              %t on AuthorizedKeysCommand                                  #                          
     # - Deploy this script under /etc/ssh (or corresponding location in your    #
     #   distro).                                                                #
     # - Rename it as authprinc.sh, and make sure it is owned by root and is     #
@@ -143,7 +154,7 @@ Following steps need to be performed on each linux server you want to be part of
     # - Adjust KEYPER_HOST per the hostname and port.                           #
     # - Adjust HTTP protocol to http or https per your configuration of keyper. #
     # - Add following lines to sshd_config file (%f is optional)                #
-    #    AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f        #
+    #    AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f %k %t  #
     #    AuthorizedPrincipalsCommandUser root                                   #
     # - Make sure that HOST is set to the hostname defined in keyper console.   #
     # - Restart sshd                                                            #
@@ -155,19 +166,22 @@ Following steps need to be performed on each linux server you want to be part of
     USER="$1"
     FP="$2"
     HOST=`hostname`
+    KEY="$3"
+    KEY_TYPE="$4"
     KEYPER_HOST={{HOSTNAME}}
 
     CURL_ARGS="-s -q -f -m 7"
-    CURL_URL_ARGS_GET="username=${USER}&host=${HOST}"
-    CURL_URL_ARGS_POST="-Fusername=${USER} -Fhost=${HOST}"
+    CURL_ARGS="${CURL_ARGS} --data-urlencode username=${USER}"
+    CURL_ARGS="${CURL_ARGS} --data-urlencode host=${HOST}"
+
+    [ -z ${FP} ] || CURL_ARGS="${CURL_ARGS} --data-urlencode fingerprint=${FP}"
+    [ -z ${KEY} ] || CURL_ARGS="${CURL_ARGS} --data-urlencode cert=${KEY_TYPE}#${KEY}"
 
     ## Use this if you want to get public keys using HTTP GET
-    [ -z ${FP} ] || CURL_URL_ARGS_GET="${CURL_URL_ARGS_GET}&fingerprint=${FP}"
-    curl ${CURL_ARGS} "http://${KEYPER_HOST}/api/authprinc?${CURL_URL_ARGS_GET}"
+    curl -G ${CURL_ARGS} http://${KEYPER_HOST}/api/authprinc
 
     ## Use this if you want get public keys using HTTP POST
-    #[ -z ${FP} ] || CURL_URL_ARGS_POST="${CURL_URL_ARGS_POST} -Ffingerprint=${FP}"
-    #curl ${CURL_ARGS} ${CURL_URL_ARGS_POST} http://${KEYPER_HOST}/api/authprinc
+    #curl ${CURL_ARGS} http://${KEYPER_HOST}/api/authprinc
 
     exit $?
     ```
