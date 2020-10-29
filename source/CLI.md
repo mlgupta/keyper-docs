@@ -177,6 +177,12 @@ $ curl https://sprout.dbsentry.com/api/userca
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBr/8wKPp6bnbdPxtP+ExuBNDQJ3O/DbAOta59wfWahdhGGo1Z6L4vbGgVGQV1a3sD89FbZFeGfEHfmpBxe5JThzF92IagFgxQbxzPbZP8eKMQsgldq270jeM8yl0cS13r77BCjA6ROlKQFpPcE1Mk0bKitAGhYnY9L6A9s94n9YAH//LMtB9/+3BGz2jHqS5CsXCEqTyCR2mIihdPGOxvNkFBozwB1CTl4VBM8yMBAi5iaNqacZa18Umd6aG6Z48Q7RI2cO2sDfW/sSMh/ct+glfWRoqAbTrZLEUSMs+Mhd5CpVePEpZlN8Ov52HrBWmHA0LJGWjducpffvl7jh7A4dUZl1IU2tA/qz70j09fXhSJSztTdwR1Zn5HTnlCuNAZAuDIhpC/ObBdAtqbkpNMBmAjqHnAYu2RMjrkh/wiyebUfoKTzwp/C+mwep/FAF3a+M+D4pA6BC01K3iEtdJAGc50LbyYxiCI34L+VHwYKhzCA97IjKLEAglkgPzVN5s= root@42ff51f24a7a
 ```
 
+To get CA's Key Revocation List (KRL): 
+
+```
+$ curl https://sprout.dbsentry.com/api/krlca
+```
+
 To get a host's signed certificate:
 ```
 $ curl "https://sprout.dbsentry.com/api/hostcert?hostname=getafix2&keyid=100"

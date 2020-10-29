@@ -50,7 +50,10 @@ Following data fields can be edited on Edit User page:
 
 ### User SSH Public Keys
 ![User Edit - SSH Key List](_static/user_edit_key_list.png)
-A key can be deleted by clicking on the delete button (X) against each key.
+A key can be deleted by clicking on the delete button (```X```) against each key. 
+
+```important:: Once a key is deleted, it gets added to Key Revocation List (KRL) and subsequently cannot be reused.
+```  
 
 ![User Edit - Add SSH Key](_static/user_edit_add_key.png)
 The Add SSH Key page has following data fields (* denotes required field): 
@@ -58,15 +61,21 @@ The Add SSH Key page has following data fields (* denotes required field):
 * **Key***: Copy paste SSH Key
 * **Groups***: Hostgroups for which this Key would work
 
+```important:: Keyper would not allow you to add a key that was revoked earlier. Once a key is deleted, it gets added to Key Revocation List (KRL) and subsequently cannot be reused. 
+```  
+
 ### User SSH Public Certificate
 ![User Edit - SSH Certificate List](_static/user_edit_cert_list.png)
 Following options are available for each certificate:
 * Download Certificate
 * Show Certificate
 * Copy Certifacate in clipboard (for easy copy paste operation)
-* Delete Key
+* Delete Certificate
 
 ```important:: You can also download the certificate using CLI for any user by calling URL (for e.g. curl "https://sprout.dbsentry.com/api/usercert?username=alice&keyid=103")
+```  
+
+```important:: Once a Certificate is deleted, it gets added to Key Revocation List (KRL) and subsequently cannot be reused for authentication.
 ```  
 
 ![User Edit - Add Key and get Certificate](_static/user_edit_add_cert.png)
@@ -121,6 +130,9 @@ Following options are available for each certificate:
 * Delete Key
 
 ```important:: You can also download the certificate using CLI for any user by calling URL (for e.g. curl "https://sprout.dbsentry.com/api/hostcert?hostname=getafix2&keyid=100")
+```  
+
+```important:: Once a Certificate is deleted, it gets added to Key Revocation List (KRL).
 ```  
 
 ## Groups

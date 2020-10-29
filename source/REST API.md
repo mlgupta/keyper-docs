@@ -611,5 +611,100 @@ Output (assuming ```groupname=dev_servers```):
 "Deleted group: dev_servers"
 ```
 
+## Utilities
+Following utilities are available for authentication
 
+### /authkeys (method=GET or POST)
+Returns valid public keys for a user in text format. This method is called by ```AuthorizedKeysCommand``` script ```auth.sh```. Before returning public key for the user, this method performs following checks:
+* Check Key in Key Revocation List (KRL)
+* Check Key expiry
+* Check if Key is authorized for the host
 
+**Input:**
+Input for the method can be submitted by either including in URL or posted as HTTP Form variables (* denotes required field)
+
+* **username***: Username. %u in sshd_config
+* **host***: Hostname as defined in Keyper. 
+* **fingerprint**: Key Fingerprint being used for the authentication. %f in sshd_config
+* **key**: SSH Public Key being used for the authentication. "%t#%k" in sshd_config
+
+KRL check is performed only when ```key``` is part of the input.
+
+**Output:**
+List of SSH Public Keys in text format.
+
+### /authprinc (method=GET or POST)
+Returns Principals authorized to acces a host given username and Certificate fingerprint. This method is called by ```AuthorizedPrincipalsCommand``` script ```authprinc.sh```. Before returning list of principals, this method performs following checks:
+* Check Cert in Key Revocation List (KRL)
+* Check Cert expiry
+* Check if Cert is authorized for the host
+
+**Input:**
+Input for the method can be submitted by either including in URL or posted as HTTP Form variables (* denotes required field)
+
+* **username***: Username. %u in sshd_config
+* **host***: Hostname as defined in Keyper. 
+* **fingerprint***: Certificate Fingerprint being used for the authentication. %f in sshd_config
+* **cert**: SSH Certificate being used for the authentication. "%t#%k" in sshd_config
+
+KRL check is performed only when ```cert``` is part of the input.
+
+**Output:**
+List of Principals in text format.
+
+### /hostca (method=GET or POST)
+Returns Public Key for Key used by SSH CA to sign host certificate. This Key must be included on each SSH client ```known_hosts``` file for client to trust Hosts' SSH certificates.
+
+**Input:**
+None
+
+**Output:**
+SSH CA Public Key user for host certificate sigining.
+
+### /userca (method=GET or POST)
+Returns Public Key for Key used by SSH CA to sign user certificate. This Key must be included on each SSH servers ```sshd_config``` file for against ```TrustedUserCAKeys``` to trust User's SSH certificates.
+
+**Input:**
+None
+
+**Output:**
+SSH CA Public Key user for user certificate sigining.
+
+### /krlca (method=GET or POST)
+Returns Key Revocation List File. This file can be included in each SSH Server's ```sshd_config``` file as ```RevokedKeys``` parameter. This configuration is optional and should only be used if performance of ```AuthorizedKeysCommand``` and/or ```AuthorizedPrincipalsCommand``` with Key/Cert is not acceptable.
+
+**Input:**
+None
+
+**Output:**
+SSH Key Revocation List File.
+
+### /usercert (method=GET)
+Returns signed certificate for a user. 
+
+**Input:**
+Input for the method can be submitted by including them in URL as part of HTTP GET reqeust (* denotes required field)
+
+* **username***: Username. 
+* **keyid**: KeyID of the certificate as shown on the webconsole. 
+* **fingerprint**: Certificate Fingerprint.
+
+If keyid or fingerprint is not part of the input then this method would return all the certificates for the user.
+
+**Output:**
+Signed Certificate for the user.
+
+### /hostcert (method=GET)
+Returns signed certificate for a host. 
+
+**Input:**
+Input for the method can be submitted by including them in URL as part of HTTP GET reqeust (* denotes required field)
+
+* **hostname***: Hostname. 
+* **keyid**: KeyID of the certificate as shown on the webconsole. 
+* **fingerprint**: Certificate Fingerprint.
+
+If keyid or fingerprint is not part of the input then this method would return all the certificates for the host.
+
+**Output:**
+Signed Certificate for the host.
