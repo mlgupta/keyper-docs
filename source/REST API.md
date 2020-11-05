@@ -616,7 +616,7 @@ Following utilities are available for authentication
 
 ### /authkeys (method=GET or POST)
 Returns valid public keys for a user in text format. This method is called by ```AuthorizedKeysCommand``` script ```auth.sh```. Before returning public key for the user, this method performs following checks:
-* Check Key in Key Revocation List (KRL)
+* Check Key in Key Revocation List using supplied fingerprint (KRL)
 * Check Key expiry
 * Check if Key is authorized for the host
 
@@ -626,18 +626,17 @@ Input for the method can be submitted by either including in URL or posted as HT
 * **username***: Username. %u in sshd_config
 * **host***: Hostname as defined in Keyper. 
 * **fingerprint**: Key Fingerprint being used for the authentication. %f in sshd_config
-* **key**: SSH Public Key being used for the authentication. "%t#%k" in sshd_config
 
-KRL check is performed only when ```key``` is part of the input.
+KRL check is performed using ```fingerprint```.
 
 **Output:**
 List of SSH Public Keys in text format.
 
 ### /authprinc (method=GET or POST)
 Returns Principals authorized to acces a host given username and Certificate fingerprint. This method is called by ```AuthorizedPrincipalsCommand``` script ```authprinc.sh```. Before returning list of principals, this method performs following checks:
-* Check Cert in Key Revocation List (KRL)
+* Check Cert in Key Revocation List (KRL) using certificats's serial number 
 * Check Cert expiry
-* Check if Cert is authorized for the host
+* Check if Princiapl in Cert is authorized to access the host
 
 **Input:**
 Input for the method can be submitted by either including in URL or posted as HTTP Form variables (* denotes required field)
@@ -645,9 +644,9 @@ Input for the method can be submitted by either including in URL or posted as HT
 * **username***: Username. %u in sshd_config
 * **host***: Hostname as defined in Keyper. 
 * **fingerprint***: Certificate Fingerprint being used for the authentication. %f in sshd_config
-* **cert**: SSH Certificate being used for the authentication. "%t#%k" in sshd_config
+* **serial***: Serial number on the SSH Certificate. "%s" in sshd_config
 
-KRL check is performed only when ```cert``` is part of the input.
+KRL check is performed only when ```serial``` is part of the input.
 
 **Output:**
 List of Principals in text format.

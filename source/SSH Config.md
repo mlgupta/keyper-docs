@@ -15,9 +15,9 @@ Following steps need to be performed on each linux server you want to be part of
     # mv auth.sh.txt auth.sh
     # chmod +x auth.sh
     ```
-4. Add following parameters to sshd_config (%k and %t are optional. For KRL verification %k and %t must be added)
+4. Add following parameters to sshd_config. For KRL verification %f (Key fingerprint) is must.
     ```console
-    AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u %f %k %t
+    AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u %f
     AuthorizedKeysCommandUser root
     ```
 5. Make appropriate tweaks to the script auth.sh. Especially check for KEYPER_HOST and http/https. Uncomment curl call line per your preference of http GET vs POST.
@@ -43,10 +43,6 @@ Following steps need to be performed on each linux server you want to be part of
     #              parameter. It is set using %u on AuthorizedKeysCommand       #
     # 2. fingerprint: SSH Key finger print. It is an optional parameter. It is  #
     #                 set using %f on AuthorizedKeysCommand                     #    
-    # 3. key: SSH Key finger print. It is an optional parameter. It is set      #
-    #                  using %k on AuthorizedKeysCommand                        #                          
-    # 4. key: SSH Key type. It is an optional parameter. It is set using %k on  #
-    #                  AuthorizedKeysCommand                                    #                          
     # - Deploy this script under /etc/ssh (or corresponding location in your    #
     #   distro).                                                                #
     # - Rename it as auth.sh, and make sure it is owned by root and is          #
@@ -56,7 +52,7 @@ Following steps need to be performed on each linux server you want to be part of
     # - Adjust KEYPER_HOST per the hostname and port.                           #
     # - Adjust HTTP protocol to http or https per your configuration of keyper. #
     # - Add following lines to sshd_config file (%f is optional)                #
-    #    AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u %f %k %t             #
+    #    AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u %f                   #
     #    AuthorizedKeysCommandUser root                                         #
     # - Make sure that HOST is set to the hostname defined in keyper console.   #
     # - Restart sshd                                                            #
@@ -67,8 +63,6 @@ Following steps need to be performed on each linux server you want to be part of
     #############################################################################
     USER="$1"
     FP="$2"
-    KEY="$3"
-    KEY_TYPE="$4"
     HOST=`hostname`
     KEYPER_HOST={{HOSTNAME}}
 
@@ -77,7 +71,6 @@ Following steps need to be performed on each linux server you want to be part of
     CURL_ARGS="${CURL_ARGS} --data-urlencode host=${HOST}"
 
     [ -z ${FP} ] || CURL_ARGS="${CURL_ARGS} --data-urlencode fingerprint=${FP}"
-    [ -z ${KEY} ] || CURL_ARGS="${CURL_ARGS} --data-urlencode key=${KEY_TYPE}#${KEY}"
 
     ## Use this if you want to get public keys using HTTP GET
     curl -G ${CURL_ARGS} http://${KEYPER_HOST}/api/authkeys
@@ -113,9 +106,9 @@ Following steps need to be performed on each linux server you want to be part of
     # mv authprinc.sh.txt authprinc.sh
     # chmod +x authprinc.sh
     ```
-4. Add following parameters to sshd_config (%k, and %t are optional. For KRL verification %k and %t must be added)
+4. Add following parameters to sshd_config. For KRL verification %s must be added)
     ```console
-    AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f %k %t
+    AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f %s
     AuthorizedPrincipalsCommandUser root
     ```
 5. Make appropriate tweaks to the script authprinc.sh. Especially check for KEYPER_HOST and http/https. Uncomment curl call line per your preference of http GET vs POST.
@@ -141,10 +134,8 @@ Following steps need to be performed on each linux server you want to be part of
     #              parameter. It is set using %u on AuthorizedKeysCommand       #
     # 2. fingerprint: SSH Key finger print. It is an optional parameter. It is  #
     #                 set using %f on AuthorizedKeysCommand                     #    
-    # 3. key: SSH Key. It is an optional parameter. It is set using %k on       #
-    #         AuthorizedKeysCommand                                             #                          
-    # 4. key_type: SSH Key type. It is an optional parameter. It is set using   #
-    #              %t on AuthorizedKeysCommand                                  #                          
+    # 3. serial: Certificate Serial No. It is set using %s on                   #   
+    #         AuthorizedPrincipalsCommand                                       #                          
     # - Deploy this script under /etc/ssh (or corresponding location in your    #
     #   distro).                                                                #
     # - Rename it as authprinc.sh, and make sure it is owned by root and is     #
@@ -154,20 +145,19 @@ Following steps need to be performed on each linux server you want to be part of
     # - Adjust KEYPER_HOST per the hostname and port.                           #
     # - Adjust HTTP protocol to http or https per your configuration of keyper. #
     # - Add following lines to sshd_config file (%f is optional)                #
-    #    AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f %k %t  #
+    #    AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f %s     #
     #    AuthorizedPrincipalsCommandUser root                                   #
     # - Make sure that HOST is set to the hostname defined in keyper console.   #
     # - Restart sshd                                                            #
     # - Test script by invoking it on CLI                                       #
-    #   # /etc/ssh/authprinc.sh <username> <fingerprint>                        #
+    #   # /etc/ssh/authprinc.sh <username> <fingerprint> <serial>               #
     # - Above must return a princiapl name for user                             #
     #                                                                           #
     #############################################################################
     USER="$1"
     FP="$2"
     HOST=`hostname`
-    KEY="$3"
-    KEY_TYPE="$4"
+    SERIAL="$3"
     KEYPER_HOST={{HOSTNAME}}
 
     CURL_ARGS="-s -q -f -m 7"
@@ -175,7 +165,7 @@ Following steps need to be performed on each linux server you want to be part of
     CURL_ARGS="${CURL_ARGS} --data-urlencode host=${HOST}"
 
     [ -z ${FP} ] || CURL_ARGS="${CURL_ARGS} --data-urlencode fingerprint=${FP}"
-    [ -z ${KEY} ] || CURL_ARGS="${CURL_ARGS} --data-urlencode cert=${KEY_TYPE}#${KEY}"
+    [ -z ${SERIAL} ] || CURL_ARGS="${CURL_ARGS} --data-urlencode serial=${SERIAL}"
 
     ## Use this if you want to get public keys using HTTP GET
     curl -G ${CURL_ARGS} http://${KEYPER_HOST}/api/authprinc
@@ -187,7 +177,7 @@ Following steps need to be performed on each linux server you want to be part of
     ```
 6. Test the script
     ```console
-    # ./authprinc.sh alice astrix
+    # ./authprinc.sh alice astrix SHA256:Y5WAXkMI9FxrgXaiST50Wf8mwqiWT7hdHDSNBK8b16I
     alice
     ```
     If the above returns appropriate key, you are good to go.
