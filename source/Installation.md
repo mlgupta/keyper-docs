@@ -1,6 +1,6 @@
 # Installation
 ## Requirements
-Keyper is bundled as a docker container with alpine Linux as its base. To run keyper you need to have docker running on your server. Alternatively, you can use podman, which is bundled natively with RHEL and its varients and it does not require any running daemon.
+Keyper is a docker container with alpine Linux as its base. To run Keyper you need to have docker running on your server. You can also use podman, which is bundled natively with RHEL and its variants, and it does not require any running daemon.
 
 ## Quickstart
 To run docker image using docker cli:
@@ -13,12 +13,12 @@ To run the docker image using podman cli:
 $ podman run  -p 8080:80 -p 8443:443 -p 2389:389 -p 2636:636 --hostname <hostname> --env FLASK_CONFIG=prod -it docker.io/dbsentry/keyper
 ```
 
-Either command starts a new container with keyper processes (openldap, gunicorn, nginx).
+Either command starts a new container with keyper processes (OpenLDAP, Gunicorn, Nginx).
 
 ```important:: The above commands are for demo only and start a new container with LDAP server storing data within the container. That means on re-start, data would not persist. If you want data to persist, start the container with appropriate command line parameters. Refer to the documentation.
 ```  
 
-```important:: By default, this image creates an LDAP server for the company **Example Inc** and the domain **keyper.example.org**. By default, all passwords are set to *superdupersecret*. All the default settings can be changed by passing parameters to docker/podman command line or using a parameter config file.
+```important:: By default, this image creates an LDAP server for the company **Example Inc** and the domain **keyper.example.org**. By default, all passwords are set to *superdupersecret*. All the default settings can be changed by passing parameters to the docker/podman command line or using a parameter config file.
 ```
 ## Ports
 Keyper starts services on the following ports:
@@ -33,17 +33,17 @@ Keyper starts services on the following ports:
 | nginx       | 80, 443     |
 +-------------+-------------+
 ```
-You must map nginx ports to your host port in order to access keyper web console.
+You must map nginx ports to your host port to access keyper web console.
 
 ## Environment Variables
-Following environment variables can be set as part of the docker cli:
+Following environment variables can be set as part of the docker CLI:
 ```eval_rst
 +----------------------------+--------------------------+----------------------------+
 | Environment Variable       | Description              | Default                    |
 +============================+==========================+============================+
-| LDAP_PORT                  | ldap bind port           | 389                        |
+| LDAP_PORT                  | LDAP bind port           | 389                        |
 +----------------------------+--------------------------+----------------------------+
-| LDAPS_PORT                 | ldaps bind port          | 636                        |
+| LDAPS_PORT                 | LDAPS bind port          | 636                        |
 +----------------------------+--------------------------+----------------------------+
 | LDAP_ORGANIZATION_NAME     | Name of the Organization | Example Inc.               |
 +----------------------------+--------------------------+----------------------------+
@@ -69,12 +69,26 @@ Following environment variables can be set as part of the docker cli:
 +----------------------------+--------------------------+----------------------------+
 | NGINX_GID                  | nginx user GID           | 10080                      |
 +----------------------------+--------------------------+----------------------------+
+| SSH_CA_DIR                 | CA directory             | /etc/sshca                 |
++----------------------------+--------------------------+----------------------------+
+| SSH_CA_HOST_KEY            | CA KEY for Host Cert     | ca_host_key                |
++----------------------------+--------------------------+----------------------------+
+| SSH_CA_USER_KEY            | CA KEY for User Cert     | ca_user_key                |
++----------------------------+--------------------------+----------------------------+
+| SSH_CA_KEY_TYPE            | CA Key type              | rsa                        |
++----------------------------+--------------------------+----------------------------+
+| SSH_CA_KRL_FILE            | CA KRL File              | ca_krl                     |
++----------------------------+--------------------------+----------------------------+
+| SSH_CA_TMP_WORK_DIR        | CA temp work directory   | tmp                        |
++----------------------------+--------------------------+----------------------------+
+| SSH_CA_TMP_DELETE_FLAG     | CA delete temp files     | True                       |
++----------------------------+--------------------------+----------------------------+
 ```
 
-```important:: We recommend setting the HOSTNAME parameter on cli. By default, the container creates a self-signed SSL certificate per the hostname. We recommend you use a CA issued certificate in production.
+```important:: We recommend setting the HOSTNAME parameter on CLI. By default, the container creates a self-signed SSL certificate per the hostname. We recommend you use a CA issued certificate in production.
 ```  
 
-```important:: Since version 0.2.1 all services (i.e. openldap, gunicorn, and nginx run as user nginx. 
+```important:: Since version 0.2.1 all services (i.e. OpenLDAP, Gunicorn, and Nginx run as user nginx. 
 ```  
 
 ## Data Persistence
@@ -87,15 +101,15 @@ $ docker run -p 80:80 -p 443:443 -p 389:389 -p 636:636 --hostname <hostname> --m
 For more information about docker data volume, please refer to:
 > [https://docs.docker.com/engine/tutorials/dockervolumes/](https://docs.docker.com/engine/tutorials/dockervolumes/)
 
-On subsequent starts, keyper checks for the existence of files in /etc/openldap/slapd.d and /var/lib/openldap/openldap-data, and if it finds any files there, it assumes an existing database and starts the slapd service. Otherwise, it creates a new ldap database with the password specified via environment variable **LDAP_ADMIN_PASSWORD**.
+On subsequent starts, keyper checks for the existence of files in /etc/openldap/slapd.d and /var/lib/openldap/openldap-data, and if it finds any files there, it assumes an existing database and starts the slapd service. Otherwise, it creates a new LDAP database with the password specified via environment variable **LDAP_ADMIN_PASSWORD**.
 
 ## Services
-Keyper is built using alipne linux as its base. When started, it launches three services:
+Keyper is built using alipne Linux as its base. When started, it launches three services:
 * slapd: LDAP server
 * gunicorn: REST API developed using python flask
 * nginx: Frontend Web Application developed using VueJS
 
-Keyper starts these services using runit init scheme. runit is a cross-platform Unix init scheme with service supervision. It fits perfectly within docker container framework keeping the size of container small.
+Keyper starts these services using runit init scheme. runit is a cross-platform Unix init scheme with service supervision. It fits perfectly within a docker container framework keeping the size of the container small.
 
 To manage these services, connect to your keyper docker container and issue following commands:
 
@@ -179,11 +193,11 @@ PID   USER     TIME  COMMAND
 /container/run/process # 
 ```
 
-```important:: Since version 0.2.1 all services (i.e. openldap, gunicorn, and nginx run as user nginx. 
+```important:: Since version 0.2.1 all services (i.e. OpenLDAP, Gunicorn, and Nginx run as user nginx. 
 ```  
 
 ## Logs
-Keeping in line with the [12-factor](https://12factor.net/) app methodology for the container, all the service logs are sent to the stdout of the running container. In addition, audit log for openldap is stored under /var/log/openldap/auditlog.ldif
+Keeping in line with the [12-factor](https://12factor.net/) app methodology for the container, all the service logs are sent to the stdout of the running container. In addition, audit log for OpenLDAP is stored under /var/log/openldap/auditlog.ldif
 
 ## SSL Certificate
 By default, keyper generates a self-signed certificate for the HOSTNAME specified during startup. This certificate is used by slapd (ldaps) and nginx (https). All the files are located under /container/service/nginx/assets/certs. For production use, we recommend using CA issued certificate. You can set your CA issued certificate during run time, by mounting a directory containing those files to /container/service/nginx/assets/certs and adjust their name with the following environment variables:
@@ -197,13 +211,13 @@ $ docker run --hostname keyper.example.org --mount sources=certs,target=/contain
 ```
 
 ## SSH Certificate Authority (CA)
-By default, SSH CA gets created under ```/etc/sshca``` on the running container. Keyper creates two separate sigining keys: 
-* ```ca_user_key``` is used to sign users certificates.
-* ```ca_host_kety``` is used to sign hosts certificates. 
+By default, SSH CA gets created under ```/etc/sshca``` on the running container. Keyper creates two separate signing keys: 
+* ```ca_user_key``` is used to sign users' certificates.
+* ```ca_host_kety``` is used to sign host certificates. 
 
-In addition keyper also creates a Key Revocation List (KRL) file in OpenSSH format (```ca_krl```).
+Keyper also creates a Key Revocation List (KRL) file in OpenSSH format (```ca_krl```).
 
-In order for content under ```/etc/sshca``` to persist you should present a local docker volume.  
+For content under ```/etc/sshca``` to persist you should present a local docker volume.  
 
 ```console
 /etc/sshca # ls -la

@@ -1,16 +1,16 @@
 # Command Line Interface
 All the REST APIs of Keyper can be accessed using ```curl``` CLI.  
 
-To access keyper REST APIs, use the hostname you specified during startup. By default, the container listens on both port 80 (http) and port 443 (https). If you are using a default self-generated certificate, you'll have to specify appropriate flags to ignore self-signed certificate. We recommend the use of a CA issued certificate in the production environment.  
+To access keyper REST APIs, use the hostname you specified during startup. By default, the container listens on both port 80 (HTTP) and port 443 (HTTPS). If you are using a default certificate, you'll have to specify appropriate flags to ignore a self-signed certificate. We recommend the use of a CA issued certificate in the production environment.  
 
 By default, all requests must be sent to ```http(s)://hostname/api/```  
 
-All API access is over http or https (https is recommended). All data is sent and received as JSON.  
+All API access is over HTTP or HTTPS (we recommend HTTPS). All data is sent and received as JSON.  
 
-Authentication creates a JWT token, which is used to maintain the session. For each call JWT token must be added as part of HTTP header with name Authorization and value Bearer Token  
+Authentication creates a JWT token, which is used to maintain the session. For each call, JWT token must be added as part of HTTP header with name Authorization and value Bearer Token  
 
 ## Login
-To get started login to REST service and get a new JWT token.  
+To get started login to the REST service and get a new JWT token.  
 
 ```
 $ curl  -H "Content-Type: application/json"                    \
@@ -19,7 +19,7 @@ $ curl  -H "Content-Type: application/json"                    \
         https://sprout.dbsentry.com/api/login
 ```
 
-On successful login you should get a JWT token, and output would look like the following:
+On successful login, you should get a JWT token, and output would look like the following:
 
 ```
 {
@@ -38,12 +38,12 @@ On successful login you should get a JWT token, and output would look like the f
 }
 ```
 
-Default administrator user is **admin**. If you specified a password using environment variable **LDAP_ADMIN_PASSWORD** use that password. If you did not specify a password using environment varible **LDAP_ADMIN_PASSWORD** use **superdupersecret** as password.
+The default administrator user is **admin**. If you specified a password using environment variable **LDAP_ADMIN_PASSWORD** use that password. If you did not specify a password using environment variable **LDAP_ADMIN_PASSWORD** use **superdupersecret** as password.
 
-```important:: Passwords are set during the first start within openldap database. If using data persistence, which you should, the same password should be used during subsequent startup of the container.
+```important:: Passwords are set during the first start within the OpenLDAP database. If using data persistence, which you should, the same password should be used during the subsequent startup of the container.
 ```  
 
-For each subsequent call JWT token must be added as part of HTTP header with name Authorization and value Bearer Token.  
+For each subsequent call, the JWT token must be added as part of the HTTP header with the name Authorization and value Bearer Token.  
 
 ## Example Operation
 To get list of all users:
@@ -161,7 +161,7 @@ Will result in an output like the following:
 ```
 
 ## Certificate Authentication
-If you are using Keyper as SSH CA and certificate based authentication, you can use following API URLs to get certificates from the system. These URLs are open and do not require authentication.
+If you are using Keyper as SSH CA and certificate-based authentication, you can use the following API URLs to get certificates from the system. These URLs are open and do not require authentication.
 
 To get CA's Host Public Key: 
 
