@@ -13,7 +13,7 @@ Authentication creates a JWT token, which is used to maintain the session. For e
 To get started login to REST service and get a new JWT token.  
 
 ```
-$ curl  -H "Content-Type: application/json                     \
+$ curl  -H "Content-Type: application/json"                    \
         --request POST                                         \
         -d '{ "username": "admin", "password": "<password>" }' \
         https://sprout.dbsentry.com/api/login
@@ -49,7 +49,7 @@ For each subsequent call JWT token must be added as part of HTTP header with nam
 To get list of all users:
 
 ```
-$ curl  -H "Content-Type: application/json                     \
+$ curl  -H "Content-Type: application/json"                    \
         -H "Authorization: Bearer ${JWT_TOKEN}"                \
         https://sprout.dbsentry.com/api/users
 ```
