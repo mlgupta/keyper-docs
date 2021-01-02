@@ -227,7 +227,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 
 **sshPublicCerts:**
 
-* **name**: Key Name
+* **name**: Cert Name
 * **key**: 
 * **fingerprint**: Fingerprint of the Key 
 * **hostGroups**: Host Groups this cert is applicable for.
@@ -321,7 +321,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 **sshPublicCerts:**
 
 * **keyid**: If present revoke this cert
-* **name**: Key Name
+* **name**: Cert Name
 * **key**: 
 * **fingerprint**: Fingerprint of the Key 
 * **hostGroups**: Host Groups this cert is applicable for.
@@ -472,7 +472,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 
 **sshPublicCerts:**
 
-* **name**: Key Name
+* **name**: Cert Name
 * **Key**: 
 
 
@@ -508,7 +508,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 **sshPublicCerts:**
 
 * **keyid**: If present, revoke this cert
-* **name**: Key Name
+* **name**: Cert Name
 * **Key**: 
 
 Input (Assuming ```hostname=mavrix1```):
