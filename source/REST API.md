@@ -220,24 +220,17 @@ Input for the method is submitted in JSON format (* denotes required field)
 
 **sshPublicKeys:**
 
-* **Keyid**: 
-* **keytype**:  0
 * **name**: Key Name
 * **Key**: 
 * **fingerprint**: Fingerprint of the Key 
-* **dateExpire**: Key Expiration Date (YYYYMMDD)
 * **hostGroups**: Host Groups this key is applicable for.
 
 **sshPublicCerts:**
 
-* **Keyid**: 
-* **keytype**:  1
 * **name**: Key Name
-* **Key**: 
+* **key**: 
 * **fingerprint**: Fingerprint of the Key 
-* **dateExpire**: Key Expiration Date (YYYYMMDD)
-* **hostGroups**: Host Groups this key is applicable for.
-* **cert**: Signed Cert
+* **hostGroups**: Host Groups this cert is applicable for.
 
 Input:
 ```json
@@ -314,6 +307,24 @@ Input for the method is submitted in JSON format (* denotes required field)
 * **principal***: Principal
 * **duration***: Default validity for Keys/Certificate
 * **durationUnit***: Duration Unit (Hours/Days/Weeks)
+* **sshPublicKeys**: SSH Public Keys for user (JSON array. See SSHPublicKeys Format)
+* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicKeys Format)
+
+**sshPublicKeys:**
+
+* **keyid**: If present revoke this key
+* **name**: Key Name
+* **key**: 
+* **fingerprint**: Fingerprint of the Key 
+* **hostGroups**: Host Groups this key is applicable for.
+
+**sshPublicCerts:**
+
+* **keyid**: If present revoke this cert
+* **name**: Key Name
+* **key**: 
+* **fingerprint**: Fingerprint of the Key 
+* **hostGroups**: Host Groups this cert is applicable for.
 
 Input:
 ```json
@@ -461,14 +472,8 @@ Input for the method is submitted in JSON format (* denotes required field)
 
 **sshPublicCerts:**
 
-* **Keyid**: 
-* **keytype**:  1
 * **name**: Key Name
 * **Key**: 
-* **fingerprint**: Fingerprint of the Key 
-* **dateExpire**: Key Expiration Date (YYYYMMDD)
-* **hostGroups**: Host Groups this key is applicable for.
-* **cert**: Signed Cert
 
 
 Input:
@@ -502,14 +507,9 @@ Input for the method is submitted in JSON format (* denotes required field)
 
 **sshPublicCerts:**
 
-* **Keyid**: 
-* **keytype**:  1
+* **keyid**: If present, revoke this cert
 * **name**: Key Name
 * **Key**: 
-* **fingerprint**: Fingerprint of the Key 
-* **dateExpire**: Key Expiration Date (YYYYMMDD)
-* **hostGroups**: Host Groups this key is applicable for.
-* **cert**: Signed Cert
 
 Input (Assuming ```hostname=mavrix1```):
 ```json
