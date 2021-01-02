@@ -3,7 +3,7 @@ You can use Keyper REST API to create calls to integrate with Keyper.
 
 By default, all requests must be sent to http(s)://hostname/api/
 
-All API access is over http or https (https is recommended). All data is sent and received as JSON.
+All API access is over HTTP or HTTPS (we recommend HTTPS). All data is sent and received as JSON.
 
 Authentication creates a JWT token, which is used to maintain the session. For each call JWT token must be added as part of HTTP header with name **Authorization** and value **Bearer Token**
 
@@ -200,6 +200,45 @@ Output (assuming ```username=alice```):
 ### /users (method=POST)
 Creates a user per supplied input. Make sure to format all the required input attributes.
 
+**Input Parameters:**
+Input for the method is submitted in JSON format (* denotes required field)
+
+* **cn***: Username. 
+* **userPassword***: Password.  
+* **confirmPassword***: Password. 
+* **givenName***: First Name
+* **sn***: Last Name
+* **displayName**: Display Name
+* **mail**: Email Address
+* **accountLocked**: Account Locked Flag (True/False)
+* **memberOfs**: Groups the user is member of
+* **principal***: Principal
+* **duration***: Default validity for Keys/Certificate
+* **durationUnit***: Duration Unit (Hours/Days/Weeks)
+* **sshPublicKeys**: SSH Public Keys for user (JSON array. See SSHPublicKeys Format)
+* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicKeys Format)
+
+**sshPublicKeys:**
+
+* **Keyid**: 
+* **keytype**:  Keytype (0: SSH Key, 1: SSH Signed Cert)
+* **name**: Key Name
+* **Key**: 
+* **fingerprint**: Fingerprint of the Key 
+* **dateExpire**: Key Expiration Date (YYYYMMDD)
+* **hostGroups**: Host Groups this key is applicable for.
+
+**sshPublicCerts:**
+
+* **Keyid**: 
+* **keytype**:  Keytype (0: SSH Key, 1: SSH Signed Cert)
+* **name**: Key Name
+* **Key**: 
+* **fingerprint**: Fingerprint of the Key 
+* **dateExpire**: Key Expiration Date (YYYYMMDD)
+* **hostGroups**: Host Groups this key is applicable for.
+* **cert**: Signed Cert
+
 Input:
 ```json
 {
@@ -260,6 +299,21 @@ Output:
 
 ### /users/username (method=PUT)
 Updates a user.
+
+**Input Parameters:**
+Input for the method is submitted in JSON format (* denotes required field)
+
+* **userPassword***: Password.  
+* **confirmPassword***: Password. 
+* **givenName***: First Name
+* **sn***: Last Name
+* **displayName**: Display Name
+* **mail**: Email Address
+* **accountLocked**: Account Locked Flag (True/False)
+* **memberOfs**: Groups the user is member of
+* **principal***: Principal
+* **duration***: Default validity for Keys/Certificate
+* **durationUnit***: Duration Unit (Hours/Days/Weeks)
 
 Input:
 ```json
@@ -615,7 +669,7 @@ Output (assuming ```groupname=dev_servers```):
 Following utilities are available for authentication
 
 ### /authkeys (method=GET or POST)
-Returns valid public keys for a user in text format. This method is called by ```AuthorizedKeysCommand``` script ```auth.sh```. Before returning public key for the user, this method performs following checks:
+Returns valid public keys for a user in text format. This method is called by ```AuthorizedKeysCommand``` script ```auth.sh```. Before returning the public key for the user, this method performs the following checks:
 * Check Key in Key Revocation List using supplied fingerprint (KRL)
 * Check Key expiry
 * Check if Key is authorized for the host
@@ -633,10 +687,10 @@ KRL check is performed using ```fingerprint```.
 List of SSH Public Keys in text format.
 
 ### /authprinc (method=GET or POST)
-Returns Principals authorized to acces a host given username and Certificate fingerprint. This method is called by ```AuthorizedPrincipalsCommand``` script ```authprinc.sh```. Before returning list of principals, this method performs following checks:
-* Check Cert in Key Revocation List (KRL) using certificats's serial number 
+Returns Principals authorized to acces a host given username and Certificate fingerprint. This method is called by ```AuthorizedPrincipalsCommand``` script ```authprinc.sh```. Before returning the list of principals, this method performs the following checks:
+* Check Cert in Key Revocation List (KRL) using the certificate serial number 
 * Check Cert expiry
-* Check if Princiapl in Cert is authorized to access the host
+* Check if Principal in Cert is authorized to access the host
 
 **Input:**
 Input for the method can be submitted by either including in URL or posted as HTTP Form variables (* denotes required field)
@@ -652,25 +706,25 @@ KRL check is performed only when ```serial``` is part of the input.
 List of Principals in text format.
 
 ### /hostca (method=GET or POST)
-Returns Public Key for Key used by SSH CA to sign host certificate. This Key must be included on each SSH client ```known_hosts``` file for client to trust Hosts' SSH certificates.
+Returns Public Key for Key used by SSH CA to sign host certificate. This Key must be included on each SSH client ```known_hosts``` file for the client to trust Hosts' SSH certificates.
 
 **Input:**
 None
 
 **Output:**
-SSH CA Public Key user for host certificate sigining.
+SSH CA Public Key user for host certificate signing.
 
 ### /userca (method=GET or POST)
-Returns Public Key for Key used by SSH CA to sign user certificate. This Key must be included on each SSH servers ```sshd_config``` file for against ```TrustedUserCAKeys``` to trust User's SSH certificates.
+Returns Public Key for Key used by SSH CA to sign user certificate. This Key must be included on each SSH server ```sshd_config``` file for against ```TrustedUserCAKeys``` to trust User's SSH certificates.
 
 **Input:**
 None
 
 **Output:**
-SSH CA Public Key user for user certificate sigining.
+SSH CA Public Key user for user certificate signing.
 
 ### /krlca (method=GET or POST)
-Returns Key Revocation List File. This file can be included in each SSH Server's ```sshd_config``` file as ```RevokedKeys``` parameter. This configuration is optional and should only be used if performance of ```AuthorizedKeysCommand``` and/or ```AuthorizedPrincipalsCommand``` with Key/Cert is not acceptable.
+Returns Key Revocation List File. This file can be included in each SSH Server's ```sshd_config``` file as ```RevokedKeys``` parameter. This configuration is optional and should only be used if the performance of ```AuthorizedKeysCommand``` and/or ```AuthorizedPrincipalsCommand``` with Key/Cert is not acceptable.
 
 **Input:**
 None
@@ -682,13 +736,13 @@ SSH Key Revocation List File.
 Returns signed certificate for a user. 
 
 **Input:**
-Input for the method can be submitted by including them in URL as part of HTTP GET reqeust (* denotes required field)
+Input for the method can be submitted by including them in URL as part of HTTP GET request (* denotes required field)
 
 * **username***: Username. 
 * **keyid**: KeyID of the certificate as shown on the webconsole. 
 * **fingerprint**: Certificate Fingerprint.
 
-If keyid or fingerprint is not part of the input then this method would return all the certificates for the user.
+If the keyid or fingerprint is not part of the input then this method would return all the certificates for the user.
 
 **Output:**
 Signed Certificate for the user.
@@ -697,7 +751,7 @@ Signed Certificate for the user.
 Returns signed certificate for a host. 
 
 **Input:**
-Input for the method can be submitted by including them in URL as part of HTTP GET reqeust (* denotes required field)
+Input for the method can be submitted by including them in URL as part of HTTP GET request (* denotes required field)
 
 * **hostname***: Hostname. 
 * **keyid**: KeyID of the certificate as shown on the webconsole. 

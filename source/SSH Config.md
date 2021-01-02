@@ -1,10 +1,10 @@
 # SSH Server Config
 
 ## Server Config (Key Based Authentication)
-For a Linux server to be able to work with keyper and access centralized SSH Public Key for a user, it must be running an SSH server that supports the *AuthorizedKeysCommand* option in *sshd_config* (OpenSSH 6.8 or newer). The following instructions were written for RHEL/CentOS type of Linux systems. If you are using any other flavor, you may need to tweak the instructions a little.
+For a Linux server to be able to work with keyper and access centralized SSH Public Key for a user, it must be running an SSH server that supports the *AuthorizedKeysCommand* option in *sshd_config* (OpenSSH 6.8 or newer). The following instructions were written for the RHEL/CentOS type of Linux systems. If you are using any other flavor, you may need to tweak the instructions a little.
 
-Following steps need to be performed on each linux server you want to be part of keyper:
-1. Login as root on linux server
+Following steps need to be performed on each Linux server you want to be part of keyper:
+1. Login as root on Linux server
 2. Go to SSH config directory
     ```console
      # cd /etc/ssh
@@ -15,12 +15,12 @@ Following steps need to be performed on each linux server you want to be part of
     # mv auth.sh.txt auth.sh
     # chmod +x auth.sh
     ```
-4. Add following parameters to sshd_config. For KRL verification %f (Key fingerprint) is must.
+4. Add the following parameters to sshd_config. For KRL verification %f (Key fingerprint) is a must.
     ```console
     AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u %f
     AuthorizedKeysCommandUser root
     ```
-5. Make appropriate tweaks to the script auth.sh. Especially check for KEYPER_HOST and http/https. Uncomment curl call line per your preference of http GET vs POST.
+5. Make appropriate tweaks to the script auth.sh. Especially check for KEYPER_HOST and http/https. Uncomment curl call line per your preference of HTTP GET vs POST.
     ```
     #!/bin/sh
     #############################################################################
@@ -55,7 +55,7 @@ Following steps need to be performed on each linux server you want to be part of
     #    AuthorizedKeysCommand /bin/sh /etc/ssh/auth.sh %u %f                   #
     #    AuthorizedKeysCommandUser root                                         #
     # - Make sure that HOST is set to the hostname defined in keyper console.   #
-    # - Restart sshd                                                            #
+    # - Restart sshd                                                            #
     # - Test script by invoking it on CLI                                       #
     #   # /etc/ssh/auth.sh <username>                                           #
     # - Above must return a SSH public key of the user                          #
@@ -91,10 +91,10 @@ Following steps need to be performed on each linux server you want to be part of
     # systemctl restart sshd
     ```
 
-## Server Config (Certificate Based Authentication)
-The following instructions were written for RHEL/CentOS type of Linux systems. If you are using any other flavor, you may need to tweak the instructions a little.
+## Server Config (Certificate-Based Authentication)
+The following instructions were written for the RHEL/CentOS type of Linux systems. If you are using any other flavor, you may need to tweak the instructions a little.
 
-Following steps need to be performed on each linux server you want to be part of keyper and perform certificate based authentication:
+Following steps need to be performed on each Linux server you want to be part of keyper and perform certificate-based authentication:
 1. Login as root on linux server
 2. Go to SSH config directory
     ```console
@@ -111,7 +111,7 @@ Following steps need to be performed on each linux server you want to be part of
     AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f %s
     AuthorizedPrincipalsCommandUser root
     ```
-5. Make appropriate tweaks to the script authprinc.sh. Especially check for KEYPER_HOST and http/https. Uncomment curl call line per your preference of http GET vs POST.
+5. Make appropriate tweaks to the script authprinc.sh. Especially check for KEYPER_HOST and http/https. Uncomment curl call line per your preference of HTTP GET vs POST.
     ```
     #!/bin/sh
     #############################################################################
@@ -148,7 +148,7 @@ Following steps need to be performed on each linux server you want to be part of
     #    AuthorizedPrincipalsCommand /bin/sh /etc/ssh/authprinc.sh %u %f %s     #
     #    AuthorizedPrincipalsCommandUser root                                   #
     # - Make sure that HOST is set to the hostname defined in keyper console.   #
-    # - Restart sshd                                                            #
+    # - Restart sshd                                                            #
     # - Test script by invoking it on CLI                                       #
     #   # /etc/ssh/authprinc.sh <username> <fingerprint> <serial>               #
     # - Above must return a princiapl name for user                             #
@@ -197,20 +197,20 @@ Following steps need to be performed on each linux server you want to be part of
     HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub
     ```
     TrustedUserCAKeys instructs SSH to trust user certificates signed by ca_user_key.
-    HostCertificate instructs SSH to send signed host certificate to the client when requested.
+    HostCertificate instructs SSH to send a signed host certificate to the client when requested.
 7. Restart SSH daemon for SSH to start calling auth.sh during authentication
     ```console
     # systemctl restart sshd
     ```
 
-## Client Config (Certificate Based Authentication)
-Following steps need to be performed on the client you plan to use for Certificate based authentication. These steps assume that you have already uploaded your user key to Keyper for signing:
+## Client Config (Certificate-Based Authentication)
+The following steps need to be performed on the client you plan to use for Certificate-based authentication. These steps assume that you have already uploaded your user key to Keyper for signing:
 1. Download CA's host public key.
     ```console
     # curl http://keyper.example.org/api/hostca
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCXVal4chk2nqQWYqCmFZSLOooKzpeuGUxtgIZlw2XE/Jh37cZrs2DPXGdy4H92qZ8ab/00bnbpguEEHDkYvdZ+cyVk4w6g0iVHIONG0uO/66smioggvMZEZ8IftChwgXBxkAiAwJf+zKEvRE1rbLJON4e5dnmHosWcAhi+KhkKEw5rSXUtRUH/r2IR/9z468Ky/nOq7P0LrF791RDSIjDVTt3V3Q7v3nKoQepkmEhMS+/lEZkMoFvI3bpHx1R3XlGqUnHJyvNUT095p1BsClFCfhGEcJQgDq57AbkxUhaYO7/tubFWUdn+IKFgVjRSutvNNQTswQSPdi0UdEiLxBtR6oWSJiHl8BD5F5b4qeIJNoB2qViwK1G2V3ZYttU7x6rRRJuUdq3oWcazA0wiB0H4BVH4svG7yEzRxc/gvQdVQM6vh7RYM0Iwx5VkzN61A6yf6cnIj//4YNSZ+dtNy7Cf0TplQQpDUFO0HTNRaPD8OUg8zM+P/pXGwIpVhu8wBeE=
     ```
-2. Add above key to the known_hosts file for the user in following format:
+2. Add the above key to the known_hosts file for the user in the following format:
     ```
     cert-authority *.dbsentry.com <host CA key>
     ```
