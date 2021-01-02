@@ -216,7 +216,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 * **duration***: Default validity for Keys/Certificate
 * **durationUnit***: Duration Unit (Hours/Days/Weeks)
 * **sshPublicKeys**: SSH Public Keys for user (JSON array. See SSHPublicKeys Format)
-* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicKeys Format)
+* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicCerts Format)
 
 **sshPublicKeys:**
 
@@ -308,7 +308,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 * **duration***: Default validity for Keys/Certificate
 * **durationUnit***: Duration Unit (Hours/Days/Weeks)
 * **sshPublicKeys**: SSH Public Keys for user (JSON array. See SSHPublicKeys Format)
-* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicKeys Format)
+* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicCerts Format)
 
 **sshPublicKeys:**
 
@@ -468,7 +468,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 * **owners**: 
 * **duration***: Default validity for Certificate
 * **durationUnit***: Duration Unit (Hours/Days/Weeks)
-* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicKeys Format)
+* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicCerts Format)
 
 **sshPublicCerts:**
 
@@ -503,7 +503,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 * **owners**: 
 * **duration**: Default validity for Certificate
 * **durationUnit**: Duration Unit (Hours/Days/Weeks)
-* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicKeys Format)
+* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicCerts Format)
 
 **sshPublicCerts:**
 
