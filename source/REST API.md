@@ -221,7 +221,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 **sshPublicKeys:**
 
 * **Keyid**: 
-* **keytype**:  Keytype (0: SSH Key, 1: SSH Signed Cert)
+* **keytype**:  0
 * **name**: Key Name
 * **Key**: 
 * **fingerprint**: Fingerprint of the Key 
@@ -231,7 +231,7 @@ Input for the method is submitted in JSON format (* denotes required field)
 **sshPublicCerts:**
 
 * **Keyid**: 
-* **keytype**:  Keytype (0: SSH Key, 1: SSH Signed Cert)
+* **keytype**:  1
 * **name**: Key Name
 * **Key**: 
 * **fingerprint**: Fingerprint of the Key 
@@ -448,6 +448,29 @@ Output (assuming ```hostname=mavrix2```)
 ### /hosts (method=POST)
 Creates a host in the system.
 
+**Input Parameters:**
+Input for the method is submitted in JSON format (* denotes required field)
+
+* **cn***: Hostname.  
+* **description**: Description. 
+* **principal***: Principal
+* **owners**: 
+* **duration***: Default validity for Certificate
+* **durationUnit***: Duration Unit (Hours/Days/Weeks)
+* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicKeys Format)
+
+**sshPublicCerts:**
+
+* **Keyid**: 
+* **keytype**:  1
+* **name**: Key Name
+* **Key**: 
+* **fingerprint**: Fingerprint of the Key 
+* **dateExpire**: Key Expiration Date (YYYYMMDD)
+* **hostGroups**: Host Groups this key is applicable for.
+* **cert**: Signed Cert
+
+
 Input:
 ```json
     {
@@ -466,6 +489,27 @@ Output:
 
 ### /hosts/hostname (method=PUT)
 Updates a hosts ```hostname```
+
+**Input Parameters:**
+Input for the method is submitted in JSON format (* denotes required field)
+
+* **description**: Description. 
+* **principal***: Principal
+* **owners**: 
+* **duration**: Default validity for Certificate
+* **durationUnit**: Duration Unit (Hours/Days/Weeks)
+* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicKeys Format)
+
+**sshPublicCerts:**
+
+* **Keyid**: 
+* **keytype**:  1
+* **name**: Key Name
+* **Key**: 
+* **fingerprint**: Fingerprint of the Key 
+* **dateExpire**: Key Expiration Date (YYYYMMDD)
+* **hostGroups**: Host Groups this key is applicable for.
+* **cert**: Signed Cert
 
 Input (Assuming ```hostname=mavrix1```):
 ```json
