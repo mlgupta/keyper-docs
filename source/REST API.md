@@ -296,17 +296,17 @@ Updates a user.
 **Input Parameters:**
 Input for the method is submitted in JSON format (* denotes required field)
 
-* **userPassword***: Password.  
-* **confirmPassword***: Password. 
-* **givenName***: First Name
-* **sn***: Last Name
+* **userPassword**: Password.  
+* **confirmPassword**: Password. 
+* **givenName**: First Name
+* **sn**: Last Name
 * **displayName**: Display Name
 * **mail**: Email Address
 * **accountLocked**: Account Locked Flag (True/False)
 * **memberOfs**: Groups the user is member of
-* **principal***: Principal
-* **duration***: Default validity for Keys/Certificate
-* **durationUnit***: Duration Unit (Hours/Days/Weeks)
+* **principal**: Principal
+* **duration**: Default validity for Keys/Certificate
+* **durationUnit**: Duration Unit (Hours/Days/Weeks)
 * **sshPublicKeys**: SSH Public Keys for user (JSON array. See SSHPublicKeys Format)
 * **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicCerts Format)
 
@@ -499,7 +499,7 @@ Updates a hosts ```hostname```
 Input for the method is submitted in JSON format (* denotes required field)
 
 * **description**: Description. 
-* **principal***: Principal
+* **principal**: Principal
 * **owners**: 
 * **duration**: Default validity for Certificate
 * **durationUnit**: Duration Unit (Hours/Days/Weeks)
