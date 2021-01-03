@@ -47,7 +47,7 @@ $ curl  -H "Content-Type: application/json"                           \
         https://sprout.dbsentry.com/api/login | jq -r .access_token
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDIwODg0MzQsIm5iZiI6MTYwMjA4ODQzNCwianRpIjoiYzZiYjUzYTktZTQwYy00ZTEwLTg1OWUtOGE0ZDdhZDc3MTlhIiwiZXhwIjoxNjAyMDg5MzM0LCJpZGVudGl0eSI6ImFkbWluIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIiwidXNlcl9jbGFpbXMiOiJ7cm9sZToga2V5cGVyX2FkbWlufSJ9.hDL5GvaYlburLNhMjN9jUd1cfY1itrafHqEhMZS3FxQ
 
-$ export JWT_TOEKN="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDIwODg0MzQsIm5iZiI6MTYwMjA4ODQzNCwianRpIjoiYzZiYjUzYTktZTQwYy00ZTEwLTg1OWUtOGE0ZDdhZDc3MTlhIiwiZXhwIjoxNjAyMDg5MzM0LCJpZGVudGl0eSI6ImFkbWluIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIiwidXNlcl9jbGFpbXMiOiJ7cm9sZToga2V5cGVyX2FkbWlufSJ9.hDL5GvaYlburLNhMjN9jUd1cfY1itrafHqEhMZS3FxQ"
+$ export JWT_TOKEN="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDIwODg0MzQsIm5iZiI6MTYwMjA4ODQzNCwianRpIjoiYzZiYjUzYTktZTQwYy00ZTEwLTg1OWUtOGE0ZDdhZDc3MTlhIiwiZXhwIjoxNjAyMDg5MzM0LCJpZGVudGl0eSI6ImFkbWluIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIiwidXNlcl9jbGFpbXMiOiJ7cm9sZToga2V5cGVyX2FkbWlufSJ9.hDL5GvaYlburLNhMjN9jUd1cfY1itrafHqEhMZS3FxQ"
 ```
 
 The default administrator user is **admin**. If you specified a password using environment variable **LDAP_ADMIN_PASSWORD** use that password. If you did not specify a password using environment variable **LDAP_ADMIN_PASSWORD** use **superdupersecret** as password.
