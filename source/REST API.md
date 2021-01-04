@@ -314,16 +314,16 @@ Input for the method is submitted in JSON format (* denotes required field)
 
 * **keyid**: If present revoke this key
 * **name**: Key Name
-* **key**: 
-* **fingerprint**: Fingerprint of the Key 
+* **key**: SSH Public Key
+* **fingerprint**: SHA256 Fingerprint of the Key 
 * **hostGroups**: Host Groups this key is applicable for.
 
 **sshPublicCerts:**
 
 * **keyid**: If present revoke this cert
 * **name**: Cert Name
-* **key**: 
-* **fingerprint**: Fingerprint of the Key 
+* **key**: SSH Public Key
+* **fingerprint**: SHA256 Fingerprint of the Key 
 * **hostGroups**: Host Groups this cert is applicable for.
 
 Input:
@@ -465,16 +465,8 @@ Input for the method is submitted in JSON format (* denotes required field)
 * **cn***: Hostname.  
 * **description**: Description. 
 * **principal***: Principal
-* **owners**: 
 * **duration***: Default validity for Certificate
 * **durationUnit***: Duration Unit (Hours/Days/Weeks)
-* **sshPublicCerts**: SSH Public Certs for user (JSON array. See SSHPublicCerts Format)
-
-**sshPublicCerts:**
-
-* **name**: Cert Name
-* **Key**: 
-
 
 Input:
 ```json
@@ -509,7 +501,9 @@ Input for the method is submitted in JSON format (* denotes required field)
 
 * **keyid**: If present, revoke this cert
 * **name**: Cert Name
-* **Key**: 
+* **Key**: SSH Public Key
+* **fingerprint**: SSH Public Key SHA256 fingerprint
+
 
 Input (Assuming ```hostname=mavrix1```):
 ```json
