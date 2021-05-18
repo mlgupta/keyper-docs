@@ -205,10 +205,10 @@ By default, keyper generates a self-signed certificate for the HOSTNAME specifie
 
 ```console
 $ docker run --hostname keyper.example.org --mount sources=certs,target=/container/service/nginx/assets/certs \
---env LDAP_TLS_CRT_FILENAME=my-cert.crt \
---env LDAP_TLS_KEY_FILENAME=my-cert.key \
---env LDAP_TLS_CA_CRT_FILENAME=the-ca.crt \
---detach dbsentry/keyper
+  --env LDAP_TLS_CRT_FILENAME=my-cert.crt \
+  --env LDAP_TLS_KEY_FILENAME=my-cert.key \
+  --env LDAP_TLS_CA_CRT_FILENAME=the-ca.crt \
+  --detach dbsentry/keyper
 ```
 
 When you renew your certificate, you can place the renewed certificate in the same folder, and restart keyper. Please note that the above names for keys and certificates were changed from default to show that custom filenames can be used. However, we recommened that you use the default names of ```server.key```, ```server.crt```, and ```ca.crt```.
