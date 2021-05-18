@@ -197,7 +197,11 @@ PID   USER     TIME  COMMAND
 Keeping in line with the [12-factor](https://12factor.net/) app methodology for the container, all the service logs are sent to the stdout of the running container. In addition, audit log for OpenLDAP is stored under /var/log/openldap/auditlog.ldif
 
 ## SSL Certificate
-By default, keyper generates a self-signed certificate for the HOSTNAME specified during startup. This certificate is used by slapd (ldaps) and nginx (https). All the files are located under /container/service/nginx/assets/certs. For production use, we recommend using CA issued certificate. You can set your CA issued certificate during run time, by mounting a directory containing those files to /container/service/nginx/assets/certs and adjust their name with the following environment variables:
+By default, keyper generates a self-signed certificate for the HOSTNAME specified during startup. This certificate is used by slapd (ldaps) and nginx (https). All the files are located under /container/service/nginx/assets/certs. For production use, we recommend using CA issued certificate. You can set your CA issued certificate during run time, by mounting a directory containing those files to /container/service/nginx/assets/certs. This directory must contain the following files:
+* my-server.key
+* my-server.crt
+* the-ca.crt
+* dhparam.pem 
 
 ```console
 $ docker run --hostname keyper.example.org --mount sources=certs,target=/container/service/nginx/assets/certs \
@@ -206,6 +210,8 @@ $ docker run --hostname keyper.example.org --mount sources=certs,target=/contain
 --env LDAP_TLS_CA_CRT_FILENAME=the-ca.crt \
 --detach dbsentry/keyper
 ```
+
+When you renew your certificate, you can place the renewed certificate in the same folder, and restart keyper. Please note that the above names for keys and certificates were changed from default to show that custom filenames can be used. However, we recommened that you use the default names of ```server.key```, ```server.crt```, and ```ca.crt```.
 
 ## SSH Certificate Authority (CA)
 By default, SSH CA gets created under ```/etc/sshca``` on the running container. Keyper creates two separate signing keys: 
